@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\URL;
 
 class SAML
 {
-    public function handle($request, Closure $next, $site_name)
+    public function handle($request, Closure $next, $app)
     {
-	if (!$site_name) {
+	if (!$app) {
 	    throw new \Exception('No app passed, please pass an app to continue');
 	}
-	if (SAMLAuth::isLoggedIn($site_name)) {
+	if (SAMLAuth::isLoggedIn($app)) {
 	    return $next($request);
 	} else {
 	    if ($request->input('redirect')) {
