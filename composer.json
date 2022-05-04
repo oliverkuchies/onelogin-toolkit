@@ -3,6 +3,7 @@
     "description": "A Laravel based OneLogin toolkit built off the OneLogin PHP SAML library.",
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "OneLoginToolkit\\": "src"
