@@ -10,8 +10,8 @@ use OneLoginToolkit\Helpers\SAMLAuth;
 class OneLoginController extends Controller
 {
     public static function consume(Request $request, $site_name) {
-        return SAMLAuth::consumeSAMLResponse($request, $site_name, function() use ($site_name) {
-            $attributes = SAMLAuth::getSAMLUserdata($site_name);
+        return SAMLAuth::consumeSAMLResponse($request, $site_name, function() {
+            $attributes = SAMLAuth::getSAMLUserdata();
             if (!empty($attributes)) {
                 $guid = null;
                 $first_name = null;
