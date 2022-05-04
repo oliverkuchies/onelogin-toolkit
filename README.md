@@ -29,8 +29,15 @@ You will need to disable CSRF at `app/Http/Middleware/VerifyCSRFToken.php` by ad
 
 #### Add Middleware
 
-Add `OneLoginToolkit\Middleware\SAML::class` to any Middleware group you wish to authenticate in app/Http/Kernel.php.
+Add `'onelogin' =>  \App\Http\Middleware\SAML::class` as a middleware in app/Http/Kernel.php.
 
+#### Passing app parameter to Middleware
+
+When authenticating different apps, be sure to add the app parameter to the middleware.
+
+i.e `Route::middleware('onelogin:my_app_name')->group(function() {`
+
+This will allow you to authenticate multiple apps.
 
 #### Create your first application! 
 Use `php artisan onelogin:create` and follow the prompts.
