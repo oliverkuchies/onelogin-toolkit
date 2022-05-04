@@ -1,0 +1,34 @@
+{
+    "name": "oliverkuchies/onelogin-toolkit",
+    "description": "A Laravel based OneLogin toolkit built off the OneLogin PHP SAML library.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OneLoginToolkit\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Oliver Kucharzewski",
+            "email": "oliver@olidev.com.au"
+        },
+        {
+            "name": "OneLogin"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OneLoginToolkit\\OneLoginToolkitServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^6|^7|^8|^9",
+        "illuminate/contracts": "^6|^7|^8|^9",
+        "illuminate/http": "^6|^7|^8|^9",
+        "robrichards/xmlseclibs": "^3.1"
+    }
+}
