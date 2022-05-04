@@ -39,8 +39,8 @@ class SAMLAuth
         return new self();
     }
 
-    public static function isLoggedIn($app) {
-        if (SAMLAuth::getSAMLUserdata($app) && !is_null(SAMLAuth::getSAMLUserdata($app)) && SAMLAUTH::getSAMLUserdata($app) !== 'NULL') {
+    public static function isLoggedIn($site_name) {
+        if (SAMLAuth::getSAMLUserdata($site_name) && !is_null(SAMLAuth::getSAMLUserdata($site_name)) && SAMLAUTH::getSAMLUserdata($site_name) !== 'NULL') {
             return true;
         }
 
@@ -179,64 +179,64 @@ class SAMLAuth
         }
     }
 
-    public static function clearRequestID($app) {
-        session()->remove($app . '-' . self::AUTH_REQUEST_ID);
+    public static function clearRequestID($site_name) {
+        session()->remove($site_name . '-' . self::AUTH_REQUEST_ID);
     }
 
-    public static function setAuthRequestID($app, $auth_request_id) {
-        session()->put($app . '-' . self::AUTH_REQUEST_ID, $auth_request_id);
+    public static function setAuthRequestID($site_name, $auth_request_id) {
+        session()->put($site_name . '-' . self::AUTH_REQUEST_ID, $auth_request_id);
     }
 
-    public static function setSAMLUserData($app, $saml_user_data) {
-        session()->put($app . '-' . SAMLAuth::SAML_USER_DATA, $saml_user_data);
+    public static function setSAMLUserData($site_name, $saml_user_data) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_USER_DATA, $saml_user_data);
     }
 
-    public static function setSAMLNameID($app, $saml_name_id) {
-        session()->put($app . '-' . SAMLAuth::SAML_NAME_ID, $saml_name_id);
+    public static function setSAMLNameID($site_name, $saml_name_id) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_NAME_ID, $saml_name_id);
     }
 
-    public static function setSAMLNameIDFormat($app, $saml_name_id_format) {
-        session()->put($app . '-' . SAMLAuth::SAML_NAME_ID_FORMAT, $saml_name_id_format);
+    public static function setSAMLNameIDFormat($site_name, $saml_name_id_format) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_NAME_ID_FORMAT, $saml_name_id_format);
     }
 
-    public static function setSAMLNameIDQualifier($app, $saml_name_id_qualifier) {
-        session()->put($app . '-' . SAMLAuth::SAML_NAME_ID_QUALIFIER, $saml_name_id_qualifier);
+    public static function setSAMLNameIDQualifier($site_name, $saml_name_id_qualifier) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_NAME_ID_QUALIFIER, $saml_name_id_qualifier);
     }
 
-    public static function setSAMLNameIdSpNameQualifier($app, $saml_name_id_sp_name_qualifier) {
-        session()->put($app . '-' . SAMLAuth::SAML_NAME_ID_SP_NAME_QUALIFIER, $saml_name_id_sp_name_qualifier);
+    public static function setSAMLNameIdSpNameQualifier($site_name, $saml_name_id_sp_name_qualifier) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_NAME_ID_SP_NAME_QUALIFIER, $saml_name_id_sp_name_qualifier);
     }
 
-    public static function setSAMLSessionIndex($app, $saml_session_index) {
-        session()->put($app . '-' . SAMLAuth::SAML_SESSION_INDEX, $saml_session_index);
+    public static function setSAMLSessionIndex($site_name, $saml_session_index) {
+        session()->put($site_name . '-' . SAMLAuth::SAML_SESSION_INDEX, $saml_session_index);
     }
 
-    public static function getAuthRequestID($app) {
-        return session()->get($app . '-' . self::AUTH_REQUEST_ID);
+    public static function getAuthRequestID($site_name) {
+        return session()->get($site_name . '-' . self::AUTH_REQUEST_ID);
     }
 
-    public static function getSAMLUserdata($app) {
-        return session()->get($app . '-' . self::SAML_USER_DATA);
+    public static function getSAMLUserdata($site_name) {
+        return session()->get($site_name . '-' . self::SAML_USER_DATA);
     }
 
-    public static function getSAMLNameID($app) {
-        return session()->get($app . '-' . self::SAML_NAME_ID);
+    public static function getSAMLNameID($site_name) {
+        return session()->get($site_name . '-' . self::SAML_NAME_ID);
     }
 
-    public static function getSAMLNameIDFormat($app) {
-        return session()->get($app . '-' . self::SAML_NAME_ID_FORMAT);
+    public static function getSAMLNameIDFormat($site_name) {
+        return session()->get($site_name . '-' . self::SAML_NAME_ID_FORMAT);
     }
 
-    public static function getSAMLNameIDQualifier($app) {
-        return session()->get($app . '-' . self::SAML_NAME_ID_QUALIFIER);
+    public static function getSAMLNameIDQualifier($site_name) {
+        return session()->get($site_name . '-' . self::SAML_NAME_ID_QUALIFIER);
     }
 
-    public static function getSAMLNameIDSPNameQualifier($app) {
-        return session()->get($app . '-' . self::SAML_NAME_ID_SP_NAME_QUALIFIER);
+    public static function getSAMLNameIDSPNameQualifier($site_name) {
+        return session()->get($site_name . '-' . self::SAML_NAME_ID_SP_NAME_QUALIFIER);
     }
 
-    public static function getSAMLSessionIndex($app) {
-        return session()->get($app . '-' . self::SAML_SESSION_INDEX);
+    public static function getSAMLSessionIndex($site_name) {
+        return session()->get($site_name . '-' . self::SAML_SESSION_INDEX);
     }
 
     public static function isTrustedPrefix($url) {
