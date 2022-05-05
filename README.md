@@ -35,7 +35,9 @@ Add `'onelogin' =>  \App\Http\Middleware\SAML::class` as a middleware in app/Htt
 
 When authenticating different apps, be sure to add the app parameter to the middleware.
 
-i.e `Route::middleware('onelogin:my_app_name')->group(function() {`
+Don't forget the web route as sessions will need to save, and the web middleware does this by default.
+
+i.e `Route::middleware(['onelogin:my_app_name', 'web'])->group(function() {`
 
 This will allow you to authenticate multiple apps.
 
