@@ -653,7 +653,7 @@ class Auth
      *
      * @throws Error
      */
-    public function logout(string $returnTo = null): ?string
+    public function logout($site_name, string $returnTo = null): ?string
     {
         $sloUrl = $this->getSLOurl();
         if (empty($sloUrl)) {
@@ -670,7 +670,7 @@ class Auth
             $nameIdFormat = $this->_nameidFormat;
         }
 
-        $logoutRequest = new LogoutRequest($this->_settings);
+        $logoutRequest = new LogoutRequest($site_name, $this->_settings);
 
         $this->_lastRequest = $logoutRequest->getXML();
         $this->_lastRequestID = $logoutRequest->id;

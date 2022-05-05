@@ -59,6 +59,7 @@ class LogoutRequest
     /**
      * Constructs the Logout Request object.
      *
+     * @param string 		      $site_name 	   Add a site name parameter to the request.
      * @param Settings $settings            Settings
      * @param string|null             $request             A UUEncoded Logout Request.
      * @param string|null             $nameId              The NameID that will be set in the LogoutRequest.
@@ -67,13 +68,13 @@ class LogoutRequest
      * @param string|null             $nameIdNameQualifier The NameID NameQualifier will be set in the LogoutRequest.
      * @param string|null             $nameIdSPNameQualifier The NameID SP NameQualifier will be set in the LogoutRequest.
      */
-    public function __construct($settings)
+    public function __construct($site_name, $settings)
     {
-        $nameId = SAMLAuth::getSAMLNameID();
-        $sessionIndex = SAMLAuth::getSAMLSessionIndex();
-        $nameIdFormat = SAMLAuth::getSAMLNameIDFormat();
-        $nameIdNameQualifier = SAMLAuth::getSAMLNameIDQualifier();
-        $nameIdSPNameQualifier = SAMLAuth::getSAMLNameIDSPNameQualifier();
+        $nameId = SAMLAuth::getSAMLNameID($site_name);
+        $sessionIndex = SAMLAuth::getSAMLSessionIndex($site_name);
+        $nameIdFormat = SAMLAuth::getSAMLNameIDFormat($site_name);
+        $nameIdNameQualifier = SAMLAuth::getSAMLNameIDQualifier($site_name);
+        $nameIdSPNameQualifier = SAMLAuth::getSAMLNameIDSPNameQualifier($site_name);
 
         $this->_settings = $settings;
 
