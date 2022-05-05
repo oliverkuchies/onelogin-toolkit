@@ -25,9 +25,9 @@ class SAML
 	    }
 
 	    if ($redirect) {
-		return redirect('/auth/saml?RelayState=' . $redirect);
+		return redirect('/auth/saml/' . $site_name . '?RelayState=' . $redirect);
 	    } else {
-		return redirect('/auth/saml?RelayState=' . URL::current());
+		return redirect('/auth/saml/' . $site_name . '?RelayState=' . URL::current());
 	    }
 	}
     }
