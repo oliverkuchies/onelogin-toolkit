@@ -156,7 +156,7 @@ class SAMLAuth
             throw new \Exception('Logout failed on app level.');
         }
 
-        return $auth->logout('/');
+        return $auth->logout($site_name,'/');
     }
 
     public function metadata(Request $request, $site_name) {
