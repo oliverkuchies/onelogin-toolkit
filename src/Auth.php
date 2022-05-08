@@ -301,7 +301,7 @@ class Auth
      * @throws Error
      * @throws ValidationError
      */
-    public function processResponse($requestId = null, $samlReponse = null)
+    public function processResponse($requestId = null, $samlReponse = null, $attempts = 0)
     {
         $this->_errors = array();
         $this->_lastError = $this->_lastErrorException = null;
@@ -326,7 +326,7 @@ class Auth
                 $this->_lastAssertionId = $response->getAssertionId();
                 $this->_lastAssertionNotOnOrAfter = $response->getAssertionNotOnOrAfter();
             } else {
-                $this->_errors[] = 'Invalid Request ID: ' . $response->getError();
+		$this->_errors[] = 'Invalid Request ID: ' . $response->getError();
             }
         } else {
             $this->_errors[] = 'invalid_binding';

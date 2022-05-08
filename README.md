@@ -6,6 +6,17 @@
 - Use Laravel routes to authenticate users with the identity provider.
 - Use php artisan onelogin:create to create different identity routes to use with different applications.
 
+### Route locations:
+```
+Route::get('/auth/saml/{site_name}', [SAMLAuth::class, 'requestLogin']);
+     
+Route::get('/auth/saml/{site_name}/metadata', [SAMLAuth::class, 'metadata']);
+     
+Route::get('/auth/saml/{site_name}/logout', [SAMLAuth::class, 'logout']);
+     
+Route::post('/auth/saml/{site_name}/consume', [OneLoginController::class, 'consume']);
+```
+
 ### Setup instructions
 Use `composer require oliverkuchies/onelogin-toolkit` with your Laravel instance.
 

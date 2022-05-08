@@ -1,14 +1,18 @@
 <?php
 use OneLoginToolkit\Constants;
 
+if (!defined('BASE_ROUTE')) {
+    define("BASE_ROUTE", 'auth/saml');
+}
+
 if (!defined('METADATA_ROUTE')) {
-    define("METADATA_ROUTE", 'auth/saml/metadata');
+    define("METADATA_ROUTE", '/metadata');
 }
 if (!defined('CONSUME_ROUTE')){
-    define("CONSUME_ROUTE", 'auth/saml/consume');
+    define("CONSUME_ROUTE", '/consume');
 }
 if (!defined('LOGOUT_ROUTE')) {
-    define("LOGOUT_ROUTE", 'auth/saml/logout');
+    define("LOGOUT_ROUTE", '/logout');
 }
 
 // Enable debug mode (to print errors)
@@ -34,13 +38,13 @@ return [
     'api_key' => $api_key,
     'baseurl' => env('APP_URL'),
     'sp' => array(
-        'entityId' => env('APP_URL') . '/' . METADATA_ROUTE,
+        'entityId' => METADATA_ROUTE,
         'assertionConsumerService' => array(
-            'url' => env('APP_URL') . '/' . CONSUME_ROUTE,
+            'url' => CONSUME_ROUTE,
             'binding' => $sso_binding,
         ),
         'singleLogoutService' => array(
-            'url' => env('APP_URL') . '/' . LOGOUT_ROUTE,
+            'url' => LOGOUT_ROUTE,
             'binding' => $slo_binding,
         ),
         'NameIDFormat' => Constants::NAMEID_EMAIL_ADDRESS,

@@ -32,10 +32,10 @@ class OneLogin extends Command
     public function handle()
     {
         $site_name = $this->ask('What is the name of your new OneLogin app?');
-        $service_provider_entity_id = config('onelogin.sp.entityId') . '/' . urlencode($site_name);
+        $service_provider_entity_id =  env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.entityId');
         $service_provider_acs_binding = config('onelogin.sp.assertionConsumerService.binding');
-        $service_provider_acs_url = config('onelogin.sp.assertionConsumerService.url') . '/' . urlencode($site_name);
-        $service_provider_slo_url = config('onelogin.sp.singleLogoutService.url') . '/' . urlencode($site_name);
+        $service_provider_acs_url = env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.assertionConsumerService.url');
+        $service_provider_slo_url =  env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.singleLogoutService.url');
         $service_provider_slo_binding = config('onelogin.sp.singleLogoutService.binding');
         $service_provider_name_id_format = config('onelogin.sp.NameIDFormat');
 
