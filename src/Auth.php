@@ -326,11 +326,7 @@ class Auth
                 $this->_lastAssertionId = $response->getAssertionId();
                 $this->_lastAssertionNotOnOrAfter = $response->getAssertionNotOnOrAfter();
             } else {
-                if ($attempts >= 3) {
-		    $this->_errors[] = 'Invalid Request ID: ' . $response->getError();
-		} else {
-
-		}
+		$this->_errors[] = 'Invalid Request ID: ' . $response->getError();
             }
         } else {
             $this->_errors[] = 'invalid_binding';
