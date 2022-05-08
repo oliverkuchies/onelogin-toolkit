@@ -15,7 +15,7 @@ use App\Http\Controllers\OneLoginController;
 */
 Route::middleware('web')->group(function() {
     Route::get('/auth/saml/{site_name}', [SAMLAuth::class, 'requestLogin']);
-    Route::get('/auth/saml/metadata/{site_name}', [SAMLAuth::class, 'metadata']);
-    Route::get('/auth/saml/logout/{site_name}', [SAMLAuth::class, 'logout']);
-    Route::post('/auth/saml/consume/{site_name}', [OneLoginController::class, 'consume']);
+    Route::get('/auth/saml/{site_name}/metadata', [SAMLAuth::class, 'metadata']);
+    Route::get('/auth/saml/{site_name}/logout', [SAMLAuth::class, 'logout']);
+    Route::post('/auth/saml/{site_name}/consume', [OneLoginController::class, 'consume']);
 });
