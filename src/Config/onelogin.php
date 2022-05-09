@@ -1,20 +1,6 @@
 <?php
 use OneLoginToolkit\Constants;
 
-if (!defined('BASE_ROUTE')) {
-    define("BASE_ROUTE", 'auth/saml');
-}
-
-if (!defined('METADATA_ROUTE')) {
-    define("METADATA_ROUTE", '/metadata');
-}
-if (!defined('CONSUME_ROUTE')){
-    define("CONSUME_ROUTE", '/consume');
-}
-if (!defined('LOGOUT_ROUTE')) {
-    define("LOGOUT_ROUTE", '/logout');
-}
-
 // Enable debug mode (to print errors)
 $debug = false;
 
@@ -30,21 +16,21 @@ return [
     // Also will reject the messages if not strictly follow the SAML
     // standard: Destination, NameId, Conditions ... are validated too.
     'strict' => true,
-    'metadata_route' => METADATA_ROUTE,
-    'consume_route' => CONSUME_ROUTE,
-    'logout_route' => LOGOUT_ROUTE,
+    'metadata_route' => Constants::METADATA_ROUTE,
+    'consume_route' => Constants::CONSUME_ROUTE,
+    'logout_route' => Constants::LOGOUT_ROUTE,
     'trusted_relay_prefixes' => ['example.com'],
     'debug' => $debug,
     'api_key' => $api_key,
     'baseurl' => env('APP_URL'),
     'sp' => array(
-        'entityId' => METADATA_ROUTE,
+        'entityId' => Constants::METADATA_ROUTE,
         'assertionConsumerService' => array(
-            'url' => CONSUME_ROUTE,
+            'url' => Constants::CONSUME_ROUTE,
             'binding' => $sso_binding,
         ),
         'singleLogoutService' => array(
-            'url' => LOGOUT_ROUTE,
+            'url' => Constants::LOGOUT_ROUTE,
             'binding' => $slo_binding,
         ),
         'NameIDFormat' => Constants::NAMEID_EMAIL_ADDRESS,

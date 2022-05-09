@@ -94,4 +94,9 @@ class Constants
     const SELECTOR_LOGOUT_SESSION_INDEX = '/samlp:LogoutRequest/samlp:SessionIndex';
     const SELECTOR_ASSERTION_SUBJECT_ENCRYPTED_ID = '/samlp:Response/saml:Assertion/saml:Subject/saml:EncryptedID';
     const SELECTOR_RESPONSE_ISSUER = '/samlp:Response/saml:Issuer';
+
+    const BASE_ROUTE = 'auth/saml';
+    const METADATA_ROUTE = 'metadata';
+    const CONSUME_ROUTE = 'consume';
+    const LOGOUT_ROUTE = 'logout';
 }
