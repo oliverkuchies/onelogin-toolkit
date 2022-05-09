@@ -6,6 +6,7 @@ namespace OneLoginToolkit\Commands;
 use App\Models\OneLoginSite;
 use App\Models\User;
 use Illuminate\Console\Command;
+use OneLoginToolkit\Constants;
 
 class OneLogin extends Command
 {
@@ -31,13 +32,25 @@ class OneLogin extends Command
      **/
     public function handle()
     {
+
+        $base_route = env('APP_URL');
+        $entity_id = config('onelogin.sp.entityId');
+        $sp_acs_url = config('onelogin.sp.assertionConsumerService.url');
+        $sp_slo_url = config('onelogin.sp.singleLogoutService.url');
+        $name_id_format = config('onelogin.sp.NameIDFormat');
+        $sp_slo_binding = config('onelogin.sp.singleLogoutService.binding');
+
         $site_name = $this->ask('What is the name of your new OneLogin app?');
-        $service_provider_entity_id =  env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.entityId');
-        $service_provider_acs_binding = config('onelogin.sp.assertionConsumerService.binding');
-        $service_provider_acs_url = env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.assertionConsumerService.url');
-        $service_provider_slo_url =  env('APP_URL') . '/' . urlencode($site_name) . '/' . config('onelogin.sp.singleLogoutService.url');
-        $service_provider_slo_binding = config('onelogin.sp.singleLogoutService.binding');
-        $service_provider_name_id_format = config('onelogin.sp.NameIDFormat');
+
+	$base_url = $base_route . '/' . urlencode($site_name);
+
+        $service_provider_entity_id =  $base_url . '/' .  $entity_id;
+        $service_provider_acs_url =    $base_url . '/' .  $sp_acs_url;
+        $service_provider_slo_url =    $base_url . '/' .  $sp_slo_url;
+
+        $service_provider_slo_binding = $sp_slo_binding;
+        $service_provider_name_id_format = $name_id_format;
+	$service_provider_acs_binding = config('onelogin.sp.assertionConsumerService.binding');
 
         $identity_provider_entity_id = $this->ask(
             'Please enter your identity provider entity ID / Issuer URL.'
