@@ -42,7 +42,7 @@ class OneLogin extends Command
 
         $site_name = $this->ask('What is the name of your new OneLogin app?');
 
-	$base_url = $base_route . '/' . urlencode($site_name);
+	$base_url = $base_route . '/' . Constants::BASE_ROUTE . '/' . urlencode($site_name);
 
         $service_provider_entity_id =  $base_url . '/' .  $entity_id;
         $service_provider_acs_url =    $base_url . '/' .  $sp_acs_url;
