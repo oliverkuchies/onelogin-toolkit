@@ -293,6 +293,13 @@ class Auth
         $this->_paths['schemas'] = $path;
     }
 
+    private function createResponse($samlResponse) {
+	$response = new Response($this->_settings, $samlResponse);
+	$this->_lastResponse = $response->getXMLDocument();
+
+	return $response;
+    }
+
     /**
      * Process the SAML Response sent by the IdP.
      *
@@ -301,16 +308,15 @@ class Auth
      * @throws Error
      * @throws ValidationError
      */
-    public function processResponse($requestId = null, $samlReponse = null, $attempts = 0)
+    public function processResponse($requestId = null, $samlResponse = null, $attempts = 0)
     {
         $this->_errors = array();
         $this->_lastError = $this->_lastErrorException = null;
         $this->_errorReason = null;
 
-        if (isset($samlReponse)) {
+        if (isset($samlResponse)) {
             // AuthnResponse -- HTTP_POST Binding
-            $response = new Response($this->_settings, $samlReponse);
-            $this->_lastResponse = $response->getXMLDocument();
+            $response = $this->createResponse($samlResponse);
 
             if ($response->isValid($requestId)) {
                 $this->_attributes = $response->getAttributes();
