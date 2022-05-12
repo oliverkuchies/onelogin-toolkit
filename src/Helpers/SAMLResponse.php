@@ -17,6 +17,7 @@ class SAMLResponse
     protected string $relay_state;
     protected string $saml_response;
     protected ?string $auth_request_id;
+    protected static SAMLResponse $instance;
 
     public function __construct(string $site_name, string | null $relay_state, string $saml_response) {
 	if (!$relay_state) {
@@ -122,14 +123,26 @@ class SAMLResponse
 
 	if ($auth_request_id != null) {
 	    $this->setAuthRequestID($auth_request_id);
+	    $this->getAuthRequest()->processResponse(
+		$this->getAuthRequestID(),
+		$this->getSamlResponse()
+	    );
 	} else {
-	    throw new \Exception("Failed to retrieve " . SAMLAuth::AUTH_REQUEST_ID);
-	}
 
-	$this->getAuthRequest()->processResponse(
-	    $this->getAuthRequestID(),
-	    $this->getSamlResponse()
-	);
+	    while (!SAMLAuth::getAuthRequestID($this->getSiteName())) {
+		if (SAMLAuth::getRetryCount() >= 4) {
+		    throw new \Exception("Failed to retrieve " . SAMLAuth::AUTH_REQUEST_ID);
+		}
+
+		SAMLAuth::retryAuthentication(
+		    new self(
+			$this->getSiteName(),
+			$this->getRelayState(),
+			$this->getSamlResponse()
+		    )
+		);
+	    }
+	}
     }
 
 
@@ -165,16 +178,20 @@ class SAMLResponse
 		/**
 		 * Retry until successful
 		 */
-		if (SAMLAuth::getRetryCount() < 4) {
-		    SAMLAuth::incrementRetries();
-		    SAMLAuth::authenticate(new self(
-			$this->getSiteName(),
-			$this->getRelayState(),
-			$this->getSAMLResponse()
-		    ));
+		while (!$auth_request->isAuthenticated()) {
+		    if (SAMLAuth::getRetryCount() >= 4) {
+			throw new \Exception($error_list);
+		    }
+
+		    SAMLAuth::retryAuthentication(
+			new self(
+			    $this->getSiteName(),
+			    $this->getRelayState(),
+			    $this->getSamlResponse()
+			)
+		    );
 		}
 
-		throw new \Exception($error_list);
 	    }
 	}
     }
