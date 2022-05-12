@@ -42,7 +42,7 @@ class SAMLAuth
      * @var int
      */
     public static int $retry_count = 0;
-    
+
     public function __construct() {
     }
 
@@ -192,6 +192,17 @@ class SAMLAuth
         } catch (\Exception $e) {
             echo "An error occured within Metadata:: " . $e->getMessage();
         }
+    }
+
+    public static function retryAuthentication(SAMLResponse $saml_response) {
+	if (SAMLAuth::getRetryCount() < 4) {
+	    SAMLAuth::incrementRetries();
+	    SAMLAuth::authenticate(new SAMLResponse(
+		$saml_response->getSiteName(),
+		$saml_response->getRelayState(),
+		$saml_response->getSAMLResponse()
+	    ));
+	}
     }
 
     public static function clearRequestID($site_name) {
