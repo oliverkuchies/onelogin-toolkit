@@ -32,8 +32,7 @@ class OneLogin extends Command
      **/
     public function handle()
     {
-
-        $base_route = env('APP_URL');
+        $base_route = config('onelogin.baseurl');
         $entity_id = config('onelogin.sp.entityId');
         $sp_acs_url = config('onelogin.sp.assertionConsumerService.url');
         $sp_slo_url = config('onelogin.sp.singleLogoutService.url');

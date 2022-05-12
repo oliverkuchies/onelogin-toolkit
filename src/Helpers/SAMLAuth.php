@@ -3,9 +3,14 @@
 
 namespace OneLoginToolkit\Helpers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use OneLoginToolkit\Auth;
+use OneLoginToolkit\Error;
 use OneLoginToolkit\Utils;
 use Illuminate\Http\Request;
+use OneLoginToolkit\ValidationError;
 
 /**
  * This file is part of onelogin-toolkit.
@@ -32,11 +37,35 @@ class SAMLAuth
     const AUTH_REQUEST_ID = 'AuthNRequestID';
     const SESSION_ID = 'SESSION_ID';
 
+    /**
+     * Amount of retries
+     * @var int
+     */
+    public static int $retry_count = 0;
+    
     public function __construct() {
     }
 
     public static function getInstance() {
         return new self();
+    }
+
+    /**
+     * Get amount of retries
+     * @return int
+     */
+    public static function getRetryCount(): int
+    {
+        return self::$retry_count;
+    }
+
+    /**
+     * Increment all the retries
+     * @return void
+     */
+    public static function incrementRetries(): void
+    {
+        self::$retry_count += 1;
     }
 
     public static function isLoggedIn($site_name) {
@@ -54,7 +83,7 @@ class SAMLAuth
      * @param null $site_name
      * @param null $relay_state
      * @return string
-     * @throws \OneLoginToolkit\Error
+     * @throws Error
      */
     public function requestLogin(Request $request, $site_name = null, $relay_state = null) {
         $auth = new Auth($site_name);
@@ -74,43 +103,29 @@ class SAMLAuth
     }
 
     /**
+     * @param SAMLResponse $saml_response
+     * @throws Error
+     * @throws ValidationError
+     */
+    public static function authenticate(SAMLResponse $saml_response) {
+	$saml_response->createAuthRequest();
+	$saml_response->processResponse();
+	$saml_response->checkAuthErrors();
+	$saml_response->save();
+    }
+
+    /**
      * Allow a user to consume the response from the identity provider
      *
-     * @param Request $request
-     * @param $site_name
+     * @param SAMLResponse $saml_response
      * @param $callback
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     * @throws \OneLoginToolkit\Error
-     * @throws \OneLoginToolkit\ValidationError
+     * @return Application|RedirectResponse|Redirector
+     * @throws Error
+     * @throws ValidationError
      */
-    public static function consumeSAMLResponse(Request $request, $site_name, $callback) {
-        $auth = new Auth($site_name);
-
-        $relay_state = $request->input('RelayState');
-        $saml_response = $request->input('SAMLResponse');
-
-        $auth_request_id = SAMLAuth::getAuthRequestID($site_name);
-
-        $auth->processResponse($auth_request_id, $saml_response);
-
-        if (!$auth->isAuthenticated()) {
-            $error_list = '';
-            if ($auth->getErrors()) {
-                foreach ($auth->getErrors() as $error) {
-                    $error_list .= $error . '\n';
-                }
-
-                throw new \Exception($error_list);
-            }
-        }
-
-        // Save all user session data associated with their request
-        SAMLAuth::setSAMLUserData($site_name, $auth->getAttributes());
-        SAMLAuth::setSAMLNameID($site_name, $auth->getNameId());
-        SAMLAuth::setSAMLNameIDFormat($site_name, $auth->getNameIdFormat());
-        SAMLAuth::setSAMLNameIDQualifier($site_name, $auth->getNameIdNameQualifier());
-        SAMLAuth::setSAMLNameIdSpNameQualifier($site_name, $auth->getNameIdSpNameQualifier());
-        SAMLAuth::setSAMLSessionIndex($site_name, $auth->getSessionIndex());
+    public static function consumeSAMLResponse(SAMLResponse $saml_response, $callback): Redirector|RedirectResponse|Application
+    {
+        self::authenticate($saml_response);
 
         // Run the user's call back method after session data is saved.
         $callback();
@@ -122,9 +137,9 @@ class SAMLAuth
             // redirection confirm the value of $_POST['RelayState'] is a // trusted URL.
             if (SAMLAuth::isTrustedPrefix($relay_state)) {
                 return redirect($relay_state);
-            } else {
-                throw new \Exception("OneLogin Redirect Request is not secure.");
             }
+
+            throw new \Exception("OneLogin Redirect Request is not secure.");
         } else {
             // Redirect user back to APP_URL.
             return redirect($self_url);
@@ -134,7 +149,7 @@ class SAMLAuth
     /**
      * Reset all user sessions back to their original state.
      * @return string|null
-     * @throws \OneLoginToolkit\Error
+     * @throws Error
      */
     public function logout(Request $request, $site_name) {
         $auth = new Auth($site_name);
