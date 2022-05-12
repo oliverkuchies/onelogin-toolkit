@@ -132,11 +132,11 @@ class SAMLAuth
 
         $self_url = Utils::getSelfURL();
 
-        if (isset($relay_state) && $self_url != $relay_state) {
+        if ($saml_response->getRelayState() && $self_url != $saml_response->getRelayState()) {
             // To avoid 'Open Redirect' attacks, before execute the
             // redirection confirm the value of $_POST['RelayState'] is a // trusted URL.
-            if (SAMLAuth::isTrustedPrefix($relay_state)) {
-                return redirect($relay_state);
+            if (SAMLAuth::isTrustedPrefix($saml_response->getRelayState())) {
+                return redirect($saml_response->getRelayState());
             }
 
             throw new \Exception("OneLogin Redirect Request is not secure.");

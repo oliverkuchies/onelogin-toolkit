@@ -598,7 +598,7 @@ class Utils
      */
     public static function getSelfURL()
     {
-        return URL::to('/');
+        return config('onelogin.baseurl');
     }
 
     /**
